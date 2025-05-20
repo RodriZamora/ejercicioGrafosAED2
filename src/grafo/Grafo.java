@@ -43,42 +43,46 @@ public class Grafo {
         }
     }
 
-    public void borrarVertice(int vertice) {
-        vertices[vertice] = false;
+    public void borrarVertice(Vertice v) {
+        int posVertice = obtenerPos(v);
+        vertices[posVertice] = null;
+        cantidad--;
 
         for (int i = 1; i < aristas.length; i++) {
-            aristas[vertice][i] = 0; //Borro aristas adyacentes
-            aristas[i][vertice] = 0; //Borro aristas incidentes
+            aristas[posVertice][i].setExiste(false);  //Borro aristas adyacentes
+            aristas[i][posVertice].setExiste(false); //Borro aristas incidentes
         }
-        cantidad--;
     }
 
     public void agregarArista(Vertice vInicio, Vertice vFinal, Arista arista) {
         int posVinicial = obtenerPos(vInicio);
         int posVfinal = obtenerPos(vFinal);
         Arista a = aristas[posVinicial][posVfinal];
+        a.setExiste(true);
         a.setPeso(arista.getPeso());
 
     }
 
+    public void borrarArista(Vertice vInicio, Vertice vFinal) {
+        int posVinicial = obtenerPos(vInicio);
+        int posVfinal = obtenerPos(vFinal);
 
-
-    public void borrarArista(int vInicio, int vFinal) {
-        aristas[vInicio][vFinal] = 0;
-        if (!dirigido) {
-            aristas[vFinal][vInicio] = 0;
-        }
+        aristas[posVinicial][posVfinal].setExiste(false);
     }
 
-    public int obtenerArista(int vInicio, int vFinal) {
-        return aristas[vInicio][vFinal];
+    public Arista obtenerArista(Vertice vInicio, Vertice vFinal) {
+        int posVinicial = obtenerPos(vInicio);
+        int posVfinal = obtenerPos(vFinal);
+
+        return aristas[posVinicial][posVfinal];
     }
 
-    public ILista<Integer> adyacentes(int vertice) {
-        ILista<Integer> adyacentes = new Lista<>();
+    public ILista<Vertice> adyacentes(Vertice vertice) {
+        int pos = obtenerPos(vertice);
+        ILista<Vertice> adyacentes = new Lista<>();
         for (int i = 1; i < aristas.length; i++) {
-            if (aristas[vertice][i] > 0) {
-                adyacentes.insertar(i);
+            if (aristas[pos][i].getExiste()) {
+                adyacentes.insertar(vertices[i]);
             }
         }
         return adyacentes;
