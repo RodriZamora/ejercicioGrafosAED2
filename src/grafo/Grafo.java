@@ -88,7 +88,6 @@ public class Grafo {
         return adyacentes;
     }
 
-
     //Metodos privados
 
     private int obtenerPosLibre() {
